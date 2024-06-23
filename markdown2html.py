@@ -27,8 +27,9 @@ def main():
     if not os.path.exists(markdown_file):
         print("Missing {}".format(markdown_file), file=sys.stderr)
         sys.exit(1)
-    else:
-        sys.exit(0)
+    
+    # read the markdown file
+    
 
 
 if __name__ == "__main__":
