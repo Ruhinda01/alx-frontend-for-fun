@@ -23,18 +23,40 @@ def to_html(file_content):
     Converts markdown to html
     """
     content = []
+    in_list = False
+    ul_open = False
     for line in file_content:
         if line.startswith('#'):
             parts = line.split(' ', 1)
             level = len(parts[0])
             title = parts[1].strip()
+            if in_list:
+                content.append("</ul>")
+                in_list = False
+                ul_open = False
             if 1 <= level <= 6:
                 content.append("<h{}>{}</h{}>"
                                .format(level, title, level))
             else:
                 content.append(line)
+        elif line.startswith('-'):
+            parts = line.split(' ', 1)
+            if not ul_open:
+                content.append("<ul>")
+                ul_open = True
+                in_list = True
+            item = parts[1].strip()
+            content.append("<li>{}</li>".format(item))
         else:
+            if ul_open:
+                content.append("</ul>")
+                in_list = False
+                ul_open = False
             content.append(line)
+
+    if ul_open:
+        content.append("</ul>")
+
     return '\n'.join(content)
 
 
